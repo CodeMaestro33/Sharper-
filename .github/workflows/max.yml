@@ -14,13 +14,21 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Step 2: Install Python
+      # Step 2: Set up Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.10
 
-      # Step 3: Install Dependencies (if any)
+      # Debug Step: Verify Installed Python Version
+      - name: Check Python Version
+        run: python3 --version
+
+      # Debug Step: List Repository Files
+      - name: List Repository Files
+        run: ls -R
+
+      # Step 3: Install Dependencies
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt || echo "No dependencies"
