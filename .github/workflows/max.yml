@@ -1,32 +1,46 @@
-name: Daily Commit
+name: Daily Update
 
 on:
   schedule:
-    - cron: "0 0 * * *" # Run daily at midnight
-  workflow_dispatch: # Allow manual trigger
+    - cron: "*/15 * * * *" # Runs every 15 minutes
+  workflow_dispatch: # Allows manual trigger
 
 jobs:
-  daily-update:
+  update:
     runs-on: ubuntu-latest
+
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Run Daily Quote Script
-        run: |
-          python3 daily_quote.py
+      # Step 2: Install Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
 
+      # Step 3: Install Dependencies (if any)
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt || echo "No dependencies"
+
+      # Step 4: Run the Python Script
+      - name: Run Daily Quote Script
+        run: python3 max_quotes.py
+
+      # Step 5: Configure Git
       - name: Configure Git
         run: |
-          git config user.name "Your GitHub Username"
-          git config user.email "your-email@example.com"
+          git config --global user.name "your-username"
+          git config --global user.email "your-email@example.com"
 
+      # Step 6: Commit Changes
       - name: Commit Changes
         run: |
           git add updates/log.txt
-          git commit -m "Daily update: $(date)" || echo "Nothing to commit"
+          git commit -m "Daily update: $(date +"%Y-%m-%d %H:%M:%S")" || echo "No changes to commit"
 
+      # Step 7: Push Changes
       - name: Push Changes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: git push origin main
+        run: git push
