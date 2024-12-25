@@ -15,31 +15,38 @@ jobs:
       # Step 1: Checkout the repository
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  # Use GitHub's provided token for authentication
 
       # Step 2: Set up Python
       - name: Set up Python 3.9
         uses: actions/setup-python@v4
         with:
-          python-version: 3.9
+          python-version: 3.9  # Use Python 3.9 (change to another version if needed)
 
       # Step 3: Install dependencies
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          # Optionally, install specific packages directly
-          # pip install requests beautifulsoup4
 
       # Step 4: Run the Python script
       - name: Run Python Script
         run: python max_quotes.py  # Replace `max_quotes.py` with your actual script name
 
       # Step 5: Commit changes to update contributions
-      - name: Commit changes
+      - name: Commit Changes
         run: |
-          git config --global user.name "Your GitHub Username"
-          git config --global user.email "your-email@example.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           echo "Dummy update at $(date)" >> contribution_log.txt
           git add .
           git commit -m "Automated contribution commit at $(date)" || echo "No changes to commit"
-          git push
+          git push origin main
+
+      # Step 6: Optional Debugging Step
+      - name: Debug Token Permissions (Optional)
+        if: ${{ failure() }}
+        run: |
+          echo "Checking GitHub Token Permissions..."
+          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/
