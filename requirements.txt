@@ -33,3 +33,5 @@ jobs:
       - name: Run Python Script
         run: |
           python your_script.py  # Replace `your_script.py` with the actual script name
+requests==2.28.1
+pandas==1.5.3
