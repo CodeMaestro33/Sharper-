@@ -1,30 +1,40 @@
-name: Daily Update
+name: Python CI Workflow
 
 on:
+  # Run on pushes to the main branch
+  push:
+    branches:
+      - main
+  # Run on pull requests to the main branch
+  pull_request:
+    branches:
+      - main
+  # Run every 15 minutes
   schedule:
     - cron: "*/15 * * * *"
-  workflow_dispatch:
 
 jobs:
-  daily-update:
+  run-python-script:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
+      # Step 2: Set up Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10
+          python-version: 3.10  # Replace with your desired Python version
 
+      # Step 3: Install Dependencies
       - name: Install Dependencies
         run: |
-          if [ -f requirements.txt ]; then
-            pip install -r requirements.txt
-          else
-            echo "No requirements.txt found"
-          fi
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
+      # Step 4: Run the Python script
       - name: Run Python Script
-        run: python3 max_quotes.py
+        run: |
+          python your_script.py  # Replace `your_script.py` with the actual script name
