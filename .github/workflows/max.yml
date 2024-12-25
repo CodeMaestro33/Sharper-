@@ -1,17 +1,13 @@
 name: Python CI Workflow
 
 on:
-  # Run on pushes to the main branch
+  # Schedule to run every 15 minutes
+  schedule:
+    - cron: "*/15 * * * *"
+  # Run on push to main branch
   push:
     branches:
       - main
-  # Run on pull requests to the main branch
-  pull_request:
-    branches:
-      - main
-  # Run every 15 minutes
-  schedule:
-    - cron: "*/15 * * * *"
 
 jobs:
   run-python-script:
@@ -26,7 +22,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10  # Updated to use a valid Python version
+          python-version: 3.10  # Specify a valid Python version
 
       # Step 3: Install Dependencies
       - name: Install Dependencies
@@ -37,4 +33,14 @@ jobs:
       # Step 4: Run the Python script
       - name: Run Python Script
         run: |
-          python your_script.py  # Replace `your_script.py` with the actual script name
+          python your_script.py  # Replace `your_script.py` with your actual script name
+
+      # Step 5: Add a dummy commit to the repository to update the contribution graph
+      - name: Make a Commit
+        run: |
+          git config --global user.name "Your GitHub Username"
+          git config --global user.email "your-email@example.com"
+          echo "Dummy update at $(date)" >> contribution_log.txt
+          git add .
+          git commit -m "Automated contribution commit at $(date)"
+          git push
