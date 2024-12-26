@@ -30,7 +30,7 @@ jobs:
 
       # Step 4: Run Python Script
       - name: Run Python Script
-        run: python your_script.py  # Replace `your_script.py` with your script name
+        run: python max_quotes.py  # script name
 
       # Step 5: Commit and Push Changes
       - name: Commit and Push Changes
