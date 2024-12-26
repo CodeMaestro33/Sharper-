@@ -15,11 +15,12 @@ jobs:
       # Step 1: Checkout repository
       - uses: actions/checkout@v3
 
-      # Step 2: Set up Python (if needed for your script)
-      - name: Set up Python 3.10
+     # Step 2: Set up Python
+      - name: Set up Python 3.9
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10
+          python-version: 3.9  # Use Python 3.9 (change to another version if needed)
+
 
       # Step 3: Add a contribution log
       - name: Update Contribution Log
