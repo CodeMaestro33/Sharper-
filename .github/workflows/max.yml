@@ -1,37 +1,43 @@
-name: Commit Contribution
+name: Python CI Workflow
 
 on:
   schedule:
-    - cron: "*/15 * * * *"  # Runs every 15 minutes
+    - cron: "*/15 * * * *"  # Run every 15 minutes
   push:
     branches:
       - main
 
 jobs:
-  build:
+  commit-job:
     runs-on: ubuntu-latest
 
     steps:
       # Step 1: Checkout repository
-      - uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-     # Step 2: Set up Python
-      - name: Set up Python 3.9
+      # Step 2: Set up Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.9  # Use Python 3.9 (change to another version if needed)
+          python-version: 3.9  # Ensure this matches your Python version
 
-
-      # Step 3: Add a contribution log
-      - name: Update Contribution Log
+      # Step 3: Install Dependencies
+      - name: Install Dependencies
         run: |
-          echo "Contribution made at $(date)" >> contribution_log.txt
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      # Step 4: Commit and push changes
-      - name: Commit changes
+      # Step 4: Run Python Script
+      - name: Run Python Script
+        run: python your_script.py  # Replace `your_script.py` with your script name
+
+      # Step 5: Commit and Push Changes
+      - name: Commit and Push Changes
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          echo "Dummy update at $(date)" >> contribution_log.txt
           git add .
           git commit -m "Automated contribution commit at $(date)" || echo "No changes to commit"
           git push
