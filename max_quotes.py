@@ -1,15 +1,18 @@
-import random
-import datetime
+import os
+from datetime import datetime
 
-# Load quotes from a file
-with open("quotes.txt", "r") as f:
-    quotes = f.readlines()
+# Path to the file to modify
+file_path = "example.txt"
 
-# Select a random quote
-daily_quote = random.choice(quotes).strip()
+def modify_file():
+    """Appends the current timestamp to the file."""
+    with open(file_path, "a") as f:
+        f.write(f"Update made at {datetime.now()}\n")
+    print(f"Modified {file_path} successfully.")
 
-# Write the quote to a log file with today's date
-with open("updates/log.txt", "a") as log:
-    log.write(f"{datetime.date.today()}: {daily_quote}\n")
-
-print("Daily quote added!")
+if __name__ == "__main__":
+    # Check if the file exists, if not create it
+    if not os.path.exists(file_path):
+        with open(file_path, "w") as f:
+            f.write("Initial content for example.txt\n")
+    modify_file()
