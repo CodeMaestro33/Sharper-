@@ -1,4 +1,4 @@
-name: Python CI Workflow
+name: Auto Commit Every 15 Minutes
 
 on:
   schedule:
@@ -8,45 +8,35 @@ on:
       - main
 
 jobs:
-  build:
+  auto-commit:
     runs-on: ubuntu-latest
 
     steps:
       # Step 1: Checkout the repository
       - name: Checkout Repository
         uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}  # Use GitHub's provided token for authentication
 
       # Step 2: Set up Python
-      - name: Set up Python 3.9
+      - name: Set up Python 3.x
         uses: actions/setup-python@v4
         with:
-          python-version: 3.9  # Use Python 3.9 (change to another version if needed)
+          python-version: 3.x
 
-      # Step 3: Install dependencies
+      # Step 3: Install Dependencies
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      # Step 4: Run the Python script
+      # Step 4: Run the Python Script to Make Changes
       - name: Run Python Script
-        run: python max_quotes.py  # Replace `max_quotes.py` with your actual script name
+        run: python auto_commit.py
 
-      # Step 5: Commit changes to update contributions
-      - name: Commit Changes
+      # Step 5: Commit and Push Changes
+      - name: Commit and Push Changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          echo "Dummy update at $(date)" >> contribution_log.txt
           git add .
-          git commit -m "Automated contribution commit at $(date)" || echo "No changes to commit"
+          git commit -m "Automated commit at $(date)" || echo "No changes to commit"
           git push origin main
-
-      # Step 6: Optional Debugging Step
-      - name: Debug Token Permissions (Optional)
-        if: ${{ failure() }}
-        run: |
-          echo "Checking GitHub Token Permissions..."
-          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/
