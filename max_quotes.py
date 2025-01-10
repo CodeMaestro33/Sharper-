@@ -7,7 +7,7 @@ import random
 file_path = "changes.txt"
 
 # Generate some content
-new_content = f"Change made at {datetime.now()}. Random number: {random.randint(1, 200)}\n"
+new_content = f"Change made at {datetime.now()}. Random number: {random.randint(1, 100)}\n"
 
 # Append the content to the file
 with open(file_path, "a") as file:
