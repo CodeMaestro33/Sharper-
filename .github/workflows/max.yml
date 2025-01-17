@@ -18,7 +18,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}  # Use GitHub's provided token for authentication
 
-      # Step 2: Set up Python
+      # Step 2: Set up py
       - name: Set up Python 3.9
         uses: actions/setup-python@v4
         with:
@@ -30,7 +30,7 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      # Step 4: Run the Python script
+      # Step 4: Run the Py script
       - name: Run Python Script
         run: python max_quotes.py  # Replace `max_quotes.py` with your actual script name
 
